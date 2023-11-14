@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body >
+<h1>HTML Geolocation</h1>
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script>
+const x = document.getElementById("demo");
+document.onload = getLocation()
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+  console.log(position)
+  UserAction(position)
+}
+
+function UserAction(position) {
+	let bodyToSend = {location_name: "test", points: [position.coords.longitude, position.coords.latitude]}
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+     console.log(this.responseText);    
+    };
+    xhttp.open("POST", "http://3.138.35.224:3001/location", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(bodyToSend));
+}
+</script>
+
+</body>
+</html>
+
